@@ -24,6 +24,7 @@ class room{
   virtual void setExits();
   virtual void removeItems(char it[]);
   virtual void addItems(char* newIt);
+  virtual bool exitExist(char look);
   virtual int findExit(char look);
   virtual bool findItem(char* look);
 };

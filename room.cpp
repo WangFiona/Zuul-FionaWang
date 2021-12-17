@@ -26,11 +26,11 @@ void room::printDescription(){
   cout << "Exits:" << endl;
   map<char, int>::iterator itr;
   for(itr=exits.begin(); itr!=exits.end(); ++itr){
-    if(itr->first=='n'){
+    if(itr->first=='N'){
       cout << "NORTH" << endl;
-    } else if(itr->first=='e'){
+    } else if(itr->first=='E'){
       cout << "EAST" << endl;
-    } else if(itr->first=='s'){
+    } else if(itr->first=='S'){
       cout << "SOUTH" << endl;
     } else{
       cout << "WEST" << endl;
@@ -67,24 +67,31 @@ void room::addItems(char* newIt){
   items.push_back(newI);
 }
 
-int room::findExit(char look){
-  map<char[], char[]>::iterator itr;
-  return exits.at(look);
-  //return exits.find(look)->second;
-  /*for(itr=exits.begin(); itr!=exits.end(); itr++){
-    if(look==itr->second){
-      return itr->first;
+bool room::exitExist(char look){
+  map<char, int>::iterator itr;
+  for(itr=exits.begin(); itr!=exits.end(); ++itr){
+    if(look==itr->first){
+      return true;
     }
-    }*/
-  /*char noExit[4]="NA";
-  return noExit;*/
+  }
+  return false;
+}
+
+int room::findExit(char look){
+  map<char, int>::iterator itr;
+  for(itr=exits.begin(); itr!=exits.end(); ++itr){
+    if(look==itr->first){
+      return itr->second;
+    }
+  }
+  return 0;
 }
 
 bool room::findItem(char* look){
   vector<item*>::iterator itr;
   for(int i=0; i<items.size(); i++){
-    //for(itr=items.begin(); itr!=items.end(); itr++){
     if(strcmp(look, items[i]->getItemName())==false){
+      //if(look==items[i]->getItemName()){
       return true;
     }
   }
