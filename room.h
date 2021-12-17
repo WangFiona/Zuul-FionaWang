@@ -21,7 +21,6 @@ class room{
   char* name;
   virtual int getID();
   virtual void printDescription();
-  virtual void setExits();
   virtual void removeItems(char it[]);
   virtual void addItems(char* newIt);
   virtual bool exitExist(char look);

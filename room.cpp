@@ -47,10 +47,6 @@ void room::printDescription(){
   }
 }
 
-void room::setExits(){
-  
-}
-
 void room::removeItems(char it[]){
   vector<item*>::iterator i;
   item* ptr;
@@ -91,7 +87,6 @@ bool room::findItem(char* look){
   vector<item*>::iterator itr;
   for(int i=0; i<items.size(); i++){
     if(strcmp(look, items[i]->getItemName())==false){
-      //if(look==items[i]->getItemName()){
       return true;
     }
   }

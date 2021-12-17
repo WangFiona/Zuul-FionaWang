@@ -81,8 +81,9 @@ int main(){
   //Lab information
   //Office information
   
-  cout << "Welcome to Sunset High School!" << endl;
+  cout << "Welcome to Zuul University!" << endl;
   cout << "Someone spilled their lunch and need your help to bring the mop from the closet to the cafeteria" << endl;
+  cout << "Enter 'help' to see the commands" << endl;
   rooms[0]->printDescription();
   //print cafeteria information
 
@@ -119,9 +120,19 @@ int main(){
     } else if(strcmp(firstword,GET)==false){
       get(id, rooms, secondword, inventory);
     } else if(strcmp(firstword, HELP)==false){
-      cout << "Enter 'go' to go through an exit, 'get' to pick up an item, 'drop' to drop an item, 'inventory' to check what items you have, and 'quit' to end the game" << endl;
+      cout << "The commands:" << endl;
+      cout << "Enter 'go [one of the exits]' to go through an exit" << endl;
+      cout << "Enter 'get [name of the item]' to pick an item up" << endl;
+      cout << "Enter 'drop [name of the item]' to drop an item" << endl;
+      cout << "Enter 'inventory' to check what items you have" << endl;
+      cout << "Enter 'quit' to end the game" << endl;
+      //cout << "Enter 'go' to go through an exit, 'get' to pick up an item, 'drop' to drop an item, 'inventory' to check what items you have, and 'quit' to end the game" << endl;
     } else if(strcmp(firstword, DROP)==false){
       drop(id, rooms, secondword, inventory);
+      if(rooms[1]->findItem(mopN)==true){
+	cout << "You win!" << endl;
+	play=false;
+      }
     } else if(strcmp(firstword, INVENTORY)==false){
       if(inventory.empty()==false){
         cout << "In your inventory:" << endl;
@@ -166,9 +177,10 @@ void drop(int id, vector<room*> &rooms, char secondword[], vector<char*> &invent
   strcpy(look, secondword);
   vector<char*>::iterator i;
   int x=0;
-  for(i=inventory.begin(); i<inventory.end();){
+  for(i=inventory.begin(); i!=inventory.end(); ++i){
     if(strcmp(look, inventory[x])==false){
       rooms[id]->addItems(look);
+      cout << *i << endl;
       inventory.erase(i);
       cout << look << " has been dropped and removed from your inventory" << endl;
       return;
