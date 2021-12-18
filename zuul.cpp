@@ -109,7 +109,7 @@ int main(){
   room* gym = new room(5, gymN, gymE, gymI);
   rooms.push_back(gym);
 
-  //1-20 information
+  //Computer lab information
   map<char, int> oneE;
   oneE['N']=2;
   oneE['E']=7;
@@ -284,7 +284,12 @@ int main(){
       cout << "Enter 'inventory' to check what items you have" << endl;
       cout << "Enter 'quit' to end the game" << endl;
     } else if(strcmp(firstword, DROP)==false){ //Dropping items into a room
-      drop(id, rooms, secondword, inventory);
+      if(inventory.empty()==false){
+	drop(id, rooms, secondword, inventory);
+      }else{
+	cout << "Your inventory is empty" << endl;
+      }
+      
       //The win condition
       if(rooms[4]->findItem(mopN)==true){
 	cout << "You brought the mop to the cafeteria. You win!" << endl;
