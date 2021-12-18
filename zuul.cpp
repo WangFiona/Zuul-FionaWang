@@ -9,11 +9,19 @@
 
 using namespace std;
 
+/* Author: Fiona Wang
+ * Data: Dec. 17, 2021
+ * This is the main class for the zuul game. 
+ * The player can travel through rooms and pick up items.
+ */
+
+//Declaring the functions
 void go(int &id, vector<room*> &rooms, char secondword[]);
 void get(int id, vector<room*> &rooms, char secondword[], vector<char*> &inventory);
 void drop(int id, vector<room*> &rooms, char secondword[], vector<char*> &inventory);
 
 int main(){
+  //Initializing the variables
   vector<room*> rooms;
   vector<char*> inventory;
   char GO[] = "GO";
@@ -26,6 +34,7 @@ int main(){
   bool play=true;
   int id=4;
 
+  //Creating the rooms, exits, and items
   //Office information
   map<char, int> officeE;
   officeE['E']=1;
@@ -207,7 +216,7 @@ int main(){
   vector<item*> labI;
   char* labN = new char[13];
   strcpy(labN, "lab");
-  room* lab = new room(13, labN, labE, labI);
+  room* lab = new room(14, labN, labE, labI);
   rooms.push_back(lab);
 
   //Closet information
@@ -222,23 +231,28 @@ int main(){
   char* mopN= new char[4];
   strcpy(mopN, "MOP");
   rooms[15]->addItems(mopN);
-  
+
+  //Introducing the game
   cout << "Welcome to Zuul University!" << endl;
   cout << "Someone spilled their lunch and need your help to bring the mop from the closet to the cafeteria" << endl;
   cout << "Enter 'help' to see the commands" << endl;
   
   rooms[4]->printDescription();
 
+  //While the win condition has not been met
   while(play==true){
+    //Ask the player to input their command
     char firstword[20];
     char secondword[20];
     cin.get(input, 80);
     cin.get();
 
+    //Allow upper and lower case commands
     for(int i=0; i < strlen(input); i++) {
       input[i] = toupper(input[i]);
     }
 
+    //Split the user's input into two parts
     int i=0;
     for(i=0; i < strlen(input); i++) {
       firstword[i]=input[i];
@@ -256,26 +270,27 @@ int main(){
       if(input[x+1]=='\0'){break;}
     }
     secondword[y]='\0';
-    
-    if(strcmp(firstword, GO)==false) {
+
+    //Find which command the user inputed 
+    if(strcmp(firstword, GO)==false) { //Moving to another room
       go(id, rooms, secondword);
-    } else if(strcmp(firstword,GET)==false){
+    } else if(strcmp(firstword,GET)==false){ //Picking items up
       get(id, rooms, secondword, inventory);
-    } else if(strcmp(firstword, HELP)==false){
+    } else if(strcmp(firstword, HELP)==false){ //Prints out the commands the user can use.
       cout << "The commands:" << endl;
       cout << "Enter 'go [one of the exits]' to go through an exit" << endl;
       cout << "Enter 'get [name of the item]' to pick an item up" << endl;
       cout << "Enter 'drop [name of the item]' to drop an item" << endl;
       cout << "Enter 'inventory' to check what items you have" << endl;
       cout << "Enter 'quit' to end the game" << endl;
-      //cout << "Enter 'go' to go through an exit, 'get' to pick up an item, 'drop' to drop an item, 'inventory' to check what items you have, and 'quit' to end the game" << endl;
-    } else if(strcmp(firstword, DROP)==false){
+    } else if(strcmp(firstword, DROP)==false){ //Dropping items into a room
       drop(id, rooms, secondword, inventory);
+      //The win condition
       if(rooms[4]->findItem(mopN)==true){
 	cout << "You brought the mop to the cafeteria. You win!" << endl;
 	play=false;
       }
-    } else if(strcmp(firstword, INVENTORY)==false){
+    } else if(strcmp(firstword, INVENTORY)==false){ //Printing out the user's inventory
       if(inventory.empty()==false){
         cout << "In your inventory:" << endl;
         for(int i=0; i<inventory.size(); i++){
@@ -284,7 +299,7 @@ int main(){
       } else{
 	cout << "Your inventory is empty" << endl;
       }
-    } else if(strcmp(firstword, QUIT)==false){
+    } else if(strcmp(firstword, QUIT)==false){ //If the player decides to quit
       return 0;
     } else{
       cout << "Please enter a valid command" << endl;
@@ -292,20 +307,26 @@ int main(){
   }
 }
 
+//Function to move from room to room
 void go(int &id, vector<room*> &rooms, char secondword[]){
   char look=secondword[0];
-  if(rooms[id]->exitExist(look)==true){
+  //Check if the exit exists
+  if(rooms[id]->exitExist(look,secondword)==true){
     id=rooms[id]->findExit(look);
+    //Print the description for the room the user travels to
     rooms[id]->printDescription();
   }else{
     cout << "That exit does not exist" << endl;
   }
 }
 
+//Function to pick up objects
 void get(int id, vector<room*> &rooms, char secondword[], vector<char*> &inventory){
   char* look = new char[10];
   strcpy(look, secondword);
+  //Check if the item exists
   if(rooms[id]->findItem(look)==true){
+    //Remove the item from the room and place it into the inventory
     rooms[id]->removeItems(secondword);
     inventory.push_back(look);
     cout << look << " has been added to your inventory" << endl;
@@ -314,15 +335,17 @@ void get(int id, vector<room*> &rooms, char secondword[], vector<char*> &invento
   }
 }
 
+//Function to drop items
 void drop(int id, vector<room*> &rooms, char secondword[], vector<char*> &inventory){
   char* look = new char[10];
   strcpy(look, secondword);
   vector<char*>::iterator i;
   int x=0;
+  //Check if the item is in the user's inventory
   for(i=inventory.begin(); i!=inventory.end(); ++i){
     if(strcmp(look, inventory[x])==false){
+      //Add the item into the room and remove it from the inventory
       rooms[id]->addItems(look);
-      cout << *i << endl;
       inventory.erase(i);
       cout << look << " has been dropped and removed from your inventory" << endl;
       return;

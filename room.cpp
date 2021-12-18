@@ -9,6 +9,12 @@
 
 using namespace std;
 
+/* Author: Fiona Wang
+ * Date: Dec. 17, 2021
+ * This is the cpp file for the zuul room functions
+ */
+
+//Creating and setting room variabls
 room::room(int d, char* n, map<char, int> e, vector<item*> i){
   name = new char[80];
   strcpy(name, n);
@@ -17,10 +23,12 @@ room::room(int d, char* n, map<char, int> e, vector<item*> i){
   copy(i.begin(), i.end(), back_inserter(items));
 }
 
+//Getting the room's id
 int room::getID(){
   return id;
 }
 
+//Prints the name, exits, and items in a room
 void room::printDescription(){
   cout << "You are in the " << name << endl;
   cout << "Exits:" << endl;
@@ -47,6 +55,7 @@ void room::printDescription(){
   }
 }
 
+//Removes items from a room
 void room::removeItems(char it[]){
   vector<item*>::iterator i;
   item* ptr;
@@ -58,21 +67,25 @@ void room::removeItems(char it[]){
   }
 }
 
+//Adds items to a room
 void room::addItems(char* newIt){
   item* newI = new item(newIt);
   items.push_back(newI);
 }
 
-bool room::exitExist(char look){
+//Searching for a specific exit
+bool room::exitExist(char look, char check[]){
   map<char, int>::iterator itr;
   for(itr=exits.begin(); itr!=exits.end(); ++itr){
-    if(look==itr->first){
+    if((strcmp(check, "NORTH")==false || strcmp(check, "EAST")==false
+	|| strcmp(check, "SOUTH")==false || strcmp(check, "WEST")==false) && look==itr->first){
       return true;
     }
   }
   return false;
 }
 
+//Find the room corresponding to the exit
 int room::findExit(char look){
   map<char, int>::iterator itr;
   for(itr=exits.begin(); itr!=exits.end(); ++itr){
@@ -83,6 +96,7 @@ int room::findExit(char look){
   return 0;
 }
 
+//Check if an item exists
 bool room::findItem(char* look){
   vector<item*>::iterator itr;
   for(int i=0; i<items.size(); i++){
