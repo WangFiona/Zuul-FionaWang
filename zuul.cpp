@@ -234,7 +234,8 @@ int main(){
 
   //Introducing the game
   cout << "Welcome to Zuul University!" << endl;
-  cout << "Someone spilled their lunch and need your help to bring the mop from the closet to the cafeteria" << endl;
+  cout << "Someone spilled their lunch!" << endl
+       << "They need your help to bring the mop from the closet to the cafeteria" << endl;
   cout << "Enter 'help' to see the commands" << endl;
   
   rooms[4]->printDescription();
